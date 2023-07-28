@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         var count: Int = 0
 
         // вью секунд
-        val seconds: TextView = findViewById(R.id.seconds)
+        //val seconds: TextView = findViewById(R.id.seconds)
 
         // вью счетчика
         val countView: TextView = findViewById(R.id.count)
@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity() {
             // делаем кнопку неактивной
             btn.isEnabled = false
 
+            /*
             // запускаем таймер
             object: CountDownTimer(20000, 1000) {
                 override fun onTick(p0: Long) {
@@ -61,6 +62,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
             }.start()
+             */
         }
     }
 
