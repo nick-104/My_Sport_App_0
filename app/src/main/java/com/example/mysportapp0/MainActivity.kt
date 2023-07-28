@@ -1,5 +1,6 @@
 package com.example.mysportapp0
 
+import android.content.Intent
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.ToneGenerator
@@ -12,17 +13,22 @@ import android.widget.Chronometer
 import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
-    var mMediaPlayer: MediaPlayer? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         // счетчик
-        var count: Int = 0
+        var count: Int
 
-        // вью секунд
-        //val seconds: TextView = findViewById(R.id.seconds)
+        // получаем значение для count из интента
+        val extraCount = intent?.extras?.getInt("extraCount")
+
+        // если значение из интента не нулевое, присваиваем его count
+        if (extraCount != null) {
+            count = extraCount
+        } else {
+            count = 0
+        }
 
         // вью счетчика
         val countView: TextView = findViewById(R.id.count)
@@ -34,54 +40,12 @@ class MainActivity : AppCompatActivity() {
             count++
             countView.text = count.toString()
 
-            // делаем кнопку неактивной
-            btn.isEnabled = false
-
-            /*
-            // запускаем таймер
-            object: CountDownTimer(20000, 1000) {
-                override fun onTick(p0: Long) {
-                    // присваиваем вью секунд значение количества оставшихся секунд
-                    seconds.text = (p0 / 1000).toString()
-                }
-
-                // после завершения таймера
-                override fun onFinish() {
-                    // делаем кнопку активной
-                    btn.isEnabled = true
-                    // обнуляем значение вью секунд (вью исчезает)
-                    seconds.text = ""
-                    /*
-                    // Тоны (стандартные звуки)
-                    val tonGen: ToneGenerator = ToneGenerator(AudioManager.STREAM_MUSIC, 1000)
-                    tonGen.startTone(ToneGenerator.TONE_DTMF_0, 300)
-                     */
-
-                    // проигрываем звук гонга
-                    playSound()
-                }
-
-            }.start()
-             */
+            // передаем интентом значение count в активити TimerActivity
+            // для того чтобы из TimerActivity передать его обратно и
+            // сохранить значение count.
+            val intent = Intent(this, TimerActivity::class.java)
+            intent.putExtra("extraCount", count)
+            startActivity(intent)
         }
-    }
-
-    // при остановке приложения
-    override fun onStop() {
-        super.onStop()
-        // обнуляем плеер
-        if (mMediaPlayer != null) {
-            mMediaPlayer?.stop()
-            mMediaPlayer?.release()
-            mMediaPlayer = null
-        }
-    }
-
-    // проигрываем звук гонга
-    fun playSound() {
-        if (mMediaPlayer == null) {
-            mMediaPlayer = MediaPlayer.create(this, R.raw.gong)
-        }
-        mMediaPlayer?.start()
     }
 }
